@@ -1,3 +1,5 @@
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -37,19 +39,27 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun Splash(navController: NavController) {
+    val context = LocalContext.current
+    val prefManager = remember { PrefManager(context) }
 
     val titleFont = FontFamily(Font(R.font.robot_black))
 
     var startAnim by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        delay(300)
+
         startAnim = true
 
-        delay(3000)
+        delay(1500)
 
-        navController.navigate(Screens.OnBoarding.route) {
-            popUpTo(Screens.Splash.route) { inclusive = true }
+        if (prefManager.isFirstTime()) {
+            navController.navigate(Screens.OnBoarding.route) {
+                popUpTo(Screens.Splash.route) { inclusive = true }
+            }
+        } else {
+            navController.navigate(Screens.Login.route) {
+                popUpTo(Screens.Splash.route) { inclusive = true }
+            }
         }
     }
 
@@ -95,7 +105,6 @@ fun Splash(navController: NavController) {
         label = ""
     )
 
-    val context = LocalContext.current
     val version = try {
         val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
         pInfo.versionName
@@ -163,5 +172,20 @@ fun Splash(navController: NavController) {
                 .alpha(versionAlpha)
                 .offset(y = versionOffsetY)
         )
+    }
+}
+
+
+class PrefManager(context: Context) {
+
+    private val prefs: SharedPreferences =
+        context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
+    fun isFirstTime(): Boolean {
+        return prefs.getBoolean("is_first_time", true)
+    }
+
+    fun setFirstTime(value: Boolean) {
+        prefs.edit().putBoolean("is_first_time", value).apply()
     }
 }

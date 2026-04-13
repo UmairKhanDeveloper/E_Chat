@@ -1,5 +1,6 @@
 package com.example.echat.presentation.screens.onboarding
 
+import PrefManager
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
@@ -22,6 +23,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.echat.R
+import com.example.echat.presentation.navigation.Screens
 import kotlinx.coroutines.launch
 import kotlin.text.compareTo
 
@@ -147,10 +150,19 @@ fun Onboarding(navController: NavController) {
             }
 
             Spacer(modifier = Modifier.height(20.dp))
+            val context = LocalContext.current
+            val prefManager = remember { PrefManager(context) }
+
+
+
 
             if (pagerState.currentPage == items.lastIndex) {
                 Button(
-                    onClick = { },
+                    onClick = {prefManager.setFirstTime(false)
+
+                        navController.navigate(Screens.Login.route) {
+                            popUpTo(Screens.OnBoarding.route) { inclusive = true }
+                        } },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(),
                     modifier = Modifier.fillMaxWidth()
@@ -223,6 +235,7 @@ fun Onboarding(navController: NavController) {
                             if (next < items.size) {
                                 pagerState.animateScrollToPage(next)
                             }
+
                         }
                     },
                     shape = CircleShape,
