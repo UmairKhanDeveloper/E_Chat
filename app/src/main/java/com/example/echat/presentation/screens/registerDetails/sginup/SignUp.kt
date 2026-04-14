@@ -1,7 +1,8 @@
-package com.example.echat.presentation.screens.login
+package com.example.echat.presentation.screens.registerDetails.sginup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,15 +10,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
@@ -41,127 +43,119 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.echat.R
-
-data class Country(
-    val name: String,
-    val dialCode: String,
-    val flag: String
-)
-
-val countries = listOf(
-    Country("United Kingdom", "+44", "🇬🇧"),
-    Country("United States", "+1", "🇺🇸"),
-    Country("Pakistan", "+92", "🇵🇰"),
-    Country("India", "+91", "🇮🇳"),
-    Country("Canada", "+1", "🇨🇦"),
-    Country("Australia", "+61", "🇦🇺"),
-    Country("Germany", "+49", "🇩🇪"),
-    Country("France", "+33", "🇫🇷"),
-    Country("Saudi Arabia", "+966", "🇸🇦"),
-    Country("UAE", "+971", "🇦🇪"),
-    Country("Turkey", "+90", "🇹🇷"),
-    Country("China", "+86", "🇨🇳"),
-    Country("Japan", "+81", "🇯🇵"),
-    Country("Brazil", "+55", "🇧🇷"),
-    Country("South Africa", "+27", "🇿🇦")
-)
+import com.example.echat.presentation.navigation.Screens
+import com.example.echat.presentation.screens.loginDetails.login.countries
 
 @Composable
-fun Login(navController: NavController) {
+fun SignUp(navController: NavController) {
     val titleFont = FontFamily(Font(R.font.robot_black))
 
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-
+        modifier = Modifier.fillMaxSize()
     ) {
 
         Image(
-            painter = painterResource(id = R.drawable.login___empty),
+            painter = painterResource(id = R.drawable.login___background),
             contentDescription = null,
             modifier = Modifier.matchParentSize(),
             contentScale = ContentScale.Crop
         )
-        Column(modifier = Modifier.fillMaxSize()) {
+
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 60.dp, bottom = 24.dp, start = 32.dp, end = 32.dp),
+                    .padding(top = 60.dp, start = 28.dp, end = 28.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Login",
-                    fontFamily = titleFont,
-                    color = colorResource(id = R.color.white),
-                    fontSize = 35.sp
-                )
+
 
                 Button(
-                    onClick = {
-
-                    }, modifier = Modifier
-                        .size(width = 112.dp, height = 53.dp)
-                        .clip(
-                            RoundedCornerShape(28.dp)
-                        ),
-                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.white))
-                ) {
-                    Text(
-                        text = "Register",
-                        color = colorResource(id = R.color.blue),
-                        fontSize = 14.sp
+                    onClick = { },
+                    modifier = Modifier
+                        .height(50.dp)
+                        .width(140.dp),
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White
                     )
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
 
+                        Icon(
+                            painter = painterResource(id = R.drawable.arrow_left),
+                            contentDescription = "Back",
+                            tint = Color(0xFF2196F3),
+                            modifier = Modifier.size(20.dp)
+                        )
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text(
+                            text = "Login",
+                            color = Color(0xFF2196F3),
+                            fontSize = 16.sp
+                        )
+                    }
                 }
+
+                Text(
+                    text = "Register",
+                    fontFamily = titleFont,
+                    color = Color.White,
+                    fontSize = 34.sp, modifier = Modifier
+                )
             }
 
             Text(
-                text = "Enter your \n" +
-                        "mobile phone",
+                text = "Enter your \nmobile phone",
                 fontFamily = titleFont,
-                color = colorResource(id = R.color.white),
-                fontWeight = FontWeight.Medium,
-                fontSize = 32.sp,
-                lineHeight = 40.sp,
-                modifier = Modifier.padding(start = 32.dp, bottom = 203.dp)
+                color = Color.White,
+                fontSize = 30.sp,
+                lineHeight = 38.sp, textAlign = TextAlign.Right,
+                modifier = Modifier.align(alignment = Alignment.End)
+                    .padding(end = 28.dp, top = 10.dp, bottom = 140.dp)
             )
+
             Text(
-                text = "You will get a code via SMS.",
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                color = colorResource(id = R.color.primary_dark),
-                lineHeight = 22.sp,
+                text = "You will get a code via sms.",
+                fontSize = 15.sp,
+                color = Color(0xFF1B526B),
                 modifier = Modifier
-                    .padding(bottom = 24.dp)
-                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth()
+                    .padding(bottom = 30.dp),
+                textAlign = TextAlign.Center
             )
-            PhoneInput()
 
-
+            SignPhoneOtp(navController)
         }
     }
 }
 
 @Composable
-fun PhoneInput() {
-    var checked by remember { mutableStateOf(false) }
+fun SignPhoneOtp(navController: NavController) {
 
+    var checked by remember { mutableStateOf(false) }
     var phone by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-    val addNumber by remember { mutableStateOf(false) }
 
     var selectedCountry by remember {
         mutableStateOf(countries[0])
@@ -170,28 +164,27 @@ fun PhoneInput() {
     Column {
 
         Row(
-            modifier = Modifier.padding(horizontal = 32.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 28.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-
-                ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
 
                 Text(selectedCountry.flag, fontSize = 22.sp)
 
-                Spacer(modifier = Modifier.width(6.dp))
-                IconButton(onClick = {
-                    expanded = true
-                }) {
+                Spacer(modifier = Modifier.width(8.dp))
+
+                IconButton(onClick = { expanded = true }) {
                     Icon(
                         Icons.Default.KeyboardArrowDown,
-                        contentDescription = null, modifier = Modifier, tint = Color(0xFF2C2D3A)
+                        contentDescription = null,
+                        tint = Color(0xFF2C2D3A)
                     )
                 }
 
-                Spacer(modifier = Modifier.width(6.dp))
+                Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
                     selectedCountry.dialCode,
@@ -209,13 +202,13 @@ fun PhoneInput() {
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
                 ),
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                    }
-                ),
                 decorationBox = {
                     if (phone.isEmpty()) {
-                        Text("00 0000 0000", color = Color.Gray)
+                        Text(
+                            "00 0000 0000",
+                            color = Color(0xFFB0B7C3),
+                            fontSize = 16.sp
+                        )
                     }
                     it()
                 }
@@ -223,21 +216,19 @@ fun PhoneInput() {
         }
 
         Divider(
-            thickness = 2.dp,
+            thickness = 1.5.dp,
             color = if (phone.isNotEmpty()) Color(0xFF40C4FF) else Color(0xFF2C2D3A),
             modifier = Modifier.padding(
                 top = 8.dp,
-                start = 32.dp,
-                end = 32.dp
+                start = 28.dp,
+                end = 28.dp
             )
         )
-
-
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 32.dp, vertical = 30.dp),
+                .padding(horizontal = 28.dp, vertical = 24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -245,19 +236,20 @@ fun PhoneInput() {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.weight(1f)
             ) {
-
                 Checkbox(
-                    colors = CheckboxDefaults.colors(checkedColor = Color(0xFF40C4FF)),
                     checked = checked,
-                    onCheckedChange = { checked = it }
+                    onCheckedChange = { checked = it },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = Color(0xFF40C4FF)
+                    )
                 )
 
                 Text("Remember me")
             }
-
             Box(
                 modifier = Modifier
-                    .size(55.dp)
+                    .clickable { navController.navigate(Screens.SignUpOtp.route) }
+                    .size(60.dp)
                     .clip(CircleShape)
                     .background(
                         if (phone.isNotEmpty()) {
@@ -286,19 +278,14 @@ fun PhoneInput() {
             }
         }
 
-
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-
             countries.forEach { country ->
-
                 DropdownMenuItem(
                     text = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(country.flag)
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(country.name)
@@ -315,5 +302,3 @@ fun PhoneInput() {
         }
     }
 }
-
-
