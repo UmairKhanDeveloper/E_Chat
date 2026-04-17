@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "764921260694",
+    "firebase_url": "https://expense-tracker-pro-63a9a-default-rtdb.firebaseio.com",
+    "project_id": "expense-tracker-pro-63a9a",
+    "storage_bucket": "expense-tracker-pro-63a9a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764921260694:android:132ab2368e569bec0bb0b7",
+        "android_client_info": {
+          "package_name": "com.example.echat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764921260694-ua6jki0qc01ll3ls8h1u9fl7f1hfs7kl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb5z_j5VRGquiVBdrDxpyggVabpDEZl1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764921260694-ua6jki0qc01ll3ls8h1u9fl7f1hfs7kl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764921260694:android:10c1f0c05657ca9e0bb0b7",
+        "android_client_info": {
+          "package_name": "com.example.expensetrackerpro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764921260694-gv7vufspu9netpuflfah80b11ds0sebm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.expensetrackerpro",
+            "certificate_hash": "356554bd219c35904c2edd80c05c233b353cd134"
+          }
+        },
+        {
+          "client_id": "764921260694-ua6jki0qc01ll3ls8h1u9fl7f1hfs7kl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb5z_j5VRGquiVBdrDxpyggVabpDEZl1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764921260694-ua6jki0qc01ll3ls8h1u9fl7f1hfs7kl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
