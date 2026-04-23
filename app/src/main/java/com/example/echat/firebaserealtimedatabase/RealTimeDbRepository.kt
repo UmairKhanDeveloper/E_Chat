@@ -93,12 +93,9 @@ class RealTimeDbRepository(private val db: DatabaseReference, private val contex
 
         val map = HashMap<String, Any>()
         map["userFistName"] = res.items.userFistName
-        map["userLastName"] = res.items.userLastName
         map["email"] = res.items.email
         map["password"] = res.items.password
-        map["phoneNumber"] = res.items.phoneNumber
-        map["age"] = res.items.age
-        map["gender"] = res.items.gender
+
 
         userNode.child(res.key!!).updateChildren(map)
             .addOnCompleteListener {

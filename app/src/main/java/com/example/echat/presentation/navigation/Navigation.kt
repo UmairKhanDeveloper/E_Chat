@@ -10,9 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.echat.presentation.screens.loginDetails.login.Login
 import com.example.echat.presentation.screens.onboarding.Onboarding
-import com.example.echat.presentation.screens.loginDetails.otp.Otp
 import com.example.echat.presentation.screens.registerDetails.sginup.SignUp
-import com.example.echat.presentation.screens.registerDetails.signUpOtp.SignUpOtp
 import com.example.echat.presentation.screens.registerDetails.userinformation.UserInformation
 
 @Composable
@@ -62,21 +60,6 @@ fun Navigation(navController: NavHostController) {
             Login(navController)
         }
         composable(
-            route = Screens.Otp.route,
-            enterTransition = {
-                androidx.compose.animation.fadeIn(
-                    animationSpec = androidx.compose.animation.core.tween(600)
-                )
-            },
-            exitTransition = {
-                androidx.compose.animation.fadeOut(
-                    animationSpec = androidx.compose.animation.core.tween(300)
-                )
-            }
-        ) {
-            Otp(navController)
-        }
-        composable(
             route = Screens.SignUp.route,
             enterTransition = {
                 androidx.compose.animation.fadeIn(
@@ -90,21 +73,6 @@ fun Navigation(navController: NavHostController) {
             }
         ) {
             SignUp(navController)
-        }
-        composable(
-            route = Screens.SignUpOtp.route,
-            enterTransition = {
-                androidx.compose.animation.fadeIn(
-                    animationSpec = androidx.compose.animation.core.tween(600)
-                )
-            },
-            exitTransition = {
-                androidx.compose.animation.fadeOut(
-                    animationSpec = androidx.compose.animation.core.tween(300)
-                )
-            }
-        ) {
-            SignUpOtp(navController)
         }
         composable(
             route = Screens.UserInformation.route,
@@ -128,8 +96,7 @@ sealed class Screens(val title: String, val route: String) {
     object Splash : Screens("Splash", "Splash")
     object OnBoarding : Screens("OnBoarding", "OnBoarding")
     object Login : Screens("Login", "Login")
-    object Otp : Screens("Otp", "Otp")
     object SignUp : Screens("SignUp", "SignUp")
-    object SignUpOtp : Screens("SignUpOtp", "SignUpOtp")
+
     object UserInformation : Screens("UserInformation", "UserInformation")
 }

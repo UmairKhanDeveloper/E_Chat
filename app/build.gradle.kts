@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.firebase.auth)
 
     // Testing
     testImplementation(libs.junit)
@@ -83,4 +85,29 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    // Firebase BOM
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+
+    // Firebase Authentication (Google login ke liye required)
+    implementation("com.google.firebase:firebase-auth-ktx")
+
+    // Optional (agar use kar rahe ho)
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+
+
+    // Google Authentication (Modern Credential Manager)
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
+    // ✅ Hilt Navigation
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+
 }

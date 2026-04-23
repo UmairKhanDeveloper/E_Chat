@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -48,11 +49,19 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.example.echat.R
+import com.example.echat.googlefibase.GoogleAuthUiClient
 
 @Composable
 fun UserInformation(navController: NavController) {
+    val context = LocalContext.current
+    val googleAuthUiClient = remember {
+        GoogleAuthUiClient(context)
+    }
+
+    val userData = googleAuthUiClient.getSignedInUser()
     val titleFont = FontFamily(Font(R.font.robot_black))
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -64,12 +73,23 @@ fun UserInformation(navController: NavController) {
 
     Box(modifier = Modifier.fillMaxSize()) {
 
-        Image(
-            painter = painterResource(id = R.drawable.login___background),
-            contentDescription = null,
-            modifier = Modifier.matchParentSize(),
-            contentScale = ContentScale.Crop
-        )
+        Column {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .background(Color(0xFF0aaaf5))
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .background(Color(0xFFedf9ff))
+            )
+        }
+
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -139,20 +159,35 @@ fun UserInformation(navController: NavController) {
                         .background(Color(0xFF87D5FA)),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (selectedImageUri != null) {
-                        Image(
-                            painter = rememberAsyncImagePainter(selectedImageUri),
-                            contentDescription = "Selected Image",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    } else {
-                        Image(
-                            painter = painterResource(id = R.drawable.user_circle),
-                            contentDescription = "Profile",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
+                    when {
+                        selectedImageUri != null -> {
+                            Image(
+                                painter = rememberAsyncImagePainter(selectedImageUri),
+                                contentDescription = "Selected Image",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+
+                        !userData?.profilePictureUrl.isNullOrEmpty() -> {
+                            AsyncImage(
+                                model = userData?.profilePictureUrl,
+                                contentDescription = "Google Image",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop,
+                                placeholder = painterResource(R.drawable.user_circle),
+                                error = painterResource(R.drawable.user_circle)
+                            )
+                        }
+
+                        else -> {
+                            Image(
+                                painter = painterResource(id = R.drawable.user_circle),
+                                contentDescription = "Profile",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                     }
                 }
 
@@ -186,9 +221,13 @@ fun UserInformation(navController: NavController) {
 @Composable
 fun ProfileItem(navController: NavController) {
 
-    var userName by remember { mutableStateOf("") }
+    val googleAuthUiClient = remember { GoogleAuthUiClient(navController.context) }
+    val userData = googleAuthUiClient.getSignedInUser()
+
+    var userName by remember { mutableStateOf(userData?.username ?: "") }
 
     val isEnabled = userName.isNotEmpty()
+
 
     Column(
         modifier = Modifier

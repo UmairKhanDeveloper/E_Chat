@@ -7,13 +7,10 @@ data class RealTimeUser(
     data class RealTimeItems(
         var photo: String = "",
         var userFistName: String = "",
-        var userLastName: String = "",
         var email: String = "",
         var password: String = "",
-        var phoneNumber: String = "",
-        var age: Int = 0,
-        var gender: String = ""
+
     ) {
-        constructor() : this("", "", "", "", "", "", 0, "")
+        constructor() : this( "", "", "", "")
     }
 }

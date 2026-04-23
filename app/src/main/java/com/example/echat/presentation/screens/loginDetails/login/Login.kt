@@ -1,102 +1,120 @@
 package com.example.echat.presentation.screens.loginDetails.login
 
-import androidx.compose.foundation.Image
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.echat.R
+import com.example.echat.firebase.AuthRepositoryImpl
+import com.example.echat.firebase.AuthViewModel
+import com.example.echat.googlefibase.GoogleAuthUiClient
+import com.example.echat.googlefibase.SignInResult
+import com.example.echat.googlefibase.SignInViewModel
 import com.example.echat.presentation.navigation.Screens
-
-data class Country(
-    val name: String,
-    val dialCode: String,
-    val flag: String
-)
-
-val countries = listOf(
-    Country("United Kingdom", "+44", "🇬🇧"),
-    Country("United States", "+1", "🇺🇸"),
-    Country("Pakistan", "+92", "🇵🇰"),
-    Country("India", "+91", "🇮🇳"),
-    Country("Canada", "+1", "🇨🇦"),
-    Country("Australia", "+61", "🇦🇺"),
-    Country("Germany", "+49", "🇩🇪"),
-    Country("France", "+33", "🇫🇷"),
-    Country("Saudi Arabia", "+966", "🇸🇦"),
-    Country("UAE", "+971", "🇦🇪"),
-    Country("Turkey", "+90", "🇹🇷"),
-    Country("China", "+86", "🇨🇳"),
-    Country("Japan", "+81", "🇯🇵"),
-    Country("Brazil", "+55", "🇧🇷"),
-    Country("South Africa", "+27", "🇿🇦")
-)
+import com.example.echat.presentation.screens.registerDetails.sginup.*
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 @Composable
 fun Login(navController: NavController) {
 
     val titleFont = FontFamily(Font(R.font.robot_black))
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val googleAuthUiClient = remember { GoogleAuthUiClient(context) }
 
+    val viewModel: SignInViewModel = viewModel()
+    val state by viewModel.state.collectAsState()
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    var isGoogleLoading by remember { mutableStateOf(false) }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
 
-        Image(
-            painter = painterResource(id = R.drawable.login___background),
-            contentDescription = null,
-            modifier = Modifier.matchParentSize(),
-            contentScale = ContentScale.Crop
-        )
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        if (result.resultCode == Activity.RESULT_OK) {
+
+            coroutineScope.launch {
+
+                val signInResult: SignInResult =
+                    googleAuthUiClient.signInWithIntent(
+                        result.data ?: run {
+                            isGoogleLoading = false
+                            return@launch
+                        }
+                    )
+
+                isGoogleLoading = false
+
+                if (signInResult.data != null) {
+                    Toast.makeText(context, "Login Successful!", Toast.LENGTH_SHORT).show()
+
+                    navController.navigate(Screens.UserInformation.route) {
+                        popUpTo(Screens.Login.route) { inclusive = true }
+                    }
+
+                    viewModel.resetState()
+
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Error: ${signInResult.errorMessage ?: "Unknown error"}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+        } else {
+            isGoogleLoading = false
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .background(Color(0xFF0aaaf5))
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .background(Color(0xFFedf9ff))
+            )
+        }
+
+        Column(modifier = Modifier.fillMaxSize()) {
 
             Row(
                 modifier = Modifier
@@ -105,203 +123,134 @@ fun Login(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Text(
                     text = "Login",
                     fontFamily = titleFont,
                     color = Color.White,
-                    fontSize = 34.sp, modifier = Modifier
+                    fontSize = 24.sp
                 )
-
-                Button(
-                    onClick = {navController.navigate(Screens.SignUp.route)},
-                    modifier = Modifier
-                        .size(width = 110.dp, height = 50.dp)
-                        .clip(RoundedCornerShape(28.dp)),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
-                ) {
-                    Text(
-                        text = "Register",
-                        color = Color(0xFF2196F3),
-                        fontSize = 14.sp
-                    )
-                }
             }
 
             Text(
-                text = "Enter your \nmobile phone",
+                text = "Welcome Back\nSign in to continue",
                 fontFamily = titleFont,
                 color = Color.White,
-                fontSize = 30.sp,
-                lineHeight = 38.sp,
-                modifier = Modifier
-                    .padding(start = 28.dp, top = 10.dp, bottom = 140.dp)
+                fontSize = 24.sp,
+                lineHeight = 36.sp,
+                modifier = Modifier.padding(start = 28.dp, top = 10.dp, bottom = 100.dp)
             )
 
-            Text(
-                text = "You will get a code via sms.",
-                fontSize = 15.sp,
-                color = Color(0xFF1B526B),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 30.dp),
-                textAlign = TextAlign.Center
-            )
-
-            PhoneInput(navController)
-        }
-    }
-}
-
-@Composable
-fun PhoneInput(navController: NavController) {
-
-    var checked by remember { mutableStateOf(false) }
-    var phone by remember { mutableStateOf("") }
-    var expanded by remember { mutableStateOf(false) }
-
-    var selectedCountry by remember {
-        mutableStateOf(countries[0])
-    }
-
-    Column {
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 28.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                Text(selectedCountry.flag, fontSize = 22.sp)
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                IconButton(onClick = { expanded = true }) {
-                    Icon(
-                        Icons.Default.KeyboardArrowDown,
-                        contentDescription = null,
-                        tint = Color(0xFF2C2D3A)
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(8.dp))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
 
                 Text(
-                    selectedCountry.dialCode,
-                    color = Color(0xFF2C2D3A)
+                    text = "Sign in with your email and password\nto access your account.",
+                    fontSize = 15.sp,
+                    color = Color(0xFF1B526B),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(bottom = 30.dp)
                 )
-            }
 
-            Spacer(modifier = Modifier.width(10.dp))
+                CustomAuthTextFieldEmail(email, { email = it }, "Email", Icons.Default.Email)
 
-            BasicTextField(
-                value = phone,
-                onValueChange = { phone = it },
-                modifier = Modifier.weight(1f),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                decorationBox = {
-                    if (phone.isEmpty()) {
-                        Text(
-                            "00 0000 0000",
-                            color = Color(0xFFB0B7C3),
-                            fontSize = 16.sp
-                        )
-                    }
-                    it()
+                CustomAuthTextFieldPassword(password, { password = it }, "Password", Icons.Default.Lock)
+
+                errorMessage?.let {
+                    Text(it, color = Color.Red, fontSize = 13.sp)
                 }
-            )
+
+                LoginButton(isLoading) {
+
+                    errorMessage = null
+
+                    when {
+                        email.isBlank() || password.isBlank() ->
+                            errorMessage = "Please enter email and password."
+
+                        !android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches() ->
+                            errorMessage = "Please enter valid email."
+
+                        else -> {
+
+                            isLoading = true
+
+                            FirebaseAuth.getInstance()
+                                .signInWithEmailAndPassword(email.trim(), password.trim())
+                                .addOnCompleteListener { task ->
+
+                                    isLoading = false
+
+                                    if (task.isSuccessful) {
+
+                                        Toast.makeText(
+                                            context,
+                                            "Login successful!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                        navController.navigate(Screens.UserInformation.route) {
+                                            popUpTo(Screens.Login.route) { inclusive = true }
+                                        }
+
+                                    } else {
+                                        errorMessage = task.exception?.message
+                                            ?: "Login failed"
+                                    }
+                                }
+                        }
+                    }
+                }
+
+                Text(
+                    "Forgot Password?",
+                    modifier = Modifier.padding(bottom = 16.dp).clickable { },
+                    color = Color(0xFF6B7580)
+                )
+
+                Text("Or", modifier = Modifier.padding(bottom = 16.dp))
+
+                SocialButton(
+                    text = "Continue with Google",
+                    icon = R.drawable.google_color_svgrepo_com
+                ) {
+                    coroutineScope.launch {
+                        isGoogleLoading = true
+                        val intentSender = googleAuthUiClient.signIn()
+
+                        intentSender?.let {
+                            launcher.launch(IntentSenderRequest.Builder(it).build())
+                        } ?: run {
+                            isGoogleLoading = false
+                        }
+                    }
+                }
+
+                Row {
+                    Text("Don’t have an account? ")
+                    Text(
+                        "Sign Up",
+                        color = Color(0xFF0E33F3),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.clickable {
+                            navController.navigate(Screens.SignUp.route)
+                        }
+                    )
+                }
+            }
         }
 
-        Divider(
-            thickness = 1.5.dp,
-            color = if (phone.isNotEmpty()) Color(0xFF40C4FF) else Color(0xFF2C2D3A),
-            modifier = Modifier.padding(
-                top = 8.dp,
-                start = 28.dp,
-                end = 28.dp
-            )
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 28.dp, vertical = 24.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f)
-            ) {
-                Checkbox(
-                    checked = checked,
-                    onCheckedChange = { checked = it },
-                    colors = CheckboxDefaults.colors(
-                        checkedColor = Color(0xFF40C4FF)
-                    )
-                )
-
-                Text("Remember me")
-            }
+        if (isGoogleLoading) {
             Box(
-                modifier = Modifier.clickable{navController.navigate(Screens.Otp.route)}
-                    .size(60.dp)
-                    .clip(CircleShape)
-                    .background(
-                        if (phone.isNotEmpty()) {
-                            Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFF40C4FF),
-                                    Color(0xFF03A9F4)
-                                )
-                            )
-                        } else {
-                            Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFF9ED9F6),
-                                    Color(0xFF7CC4E8)
-                                )
-                            )
-                        }
-                    ),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.6f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowForward,
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            }
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            countries.forEach { country ->
-                DropdownMenuItem(
-                    text = {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(country.flag)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(country.name)
-                            Spacer(modifier = Modifier.weight(1f))
-                            Text(country.dialCode)
-                        }
-                    },
-                    onClick = {
-                        selectedCountry = country
-                        expanded = false
-                    }
-                )
+                CircularProgressIndicator(color = Color.White)
             }
         }
     }
 }
-
-
