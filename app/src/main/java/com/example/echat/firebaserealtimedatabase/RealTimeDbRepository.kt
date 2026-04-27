@@ -2,11 +2,10 @@ package com.example.echat.firebaserealtimedatabase
 
 import android.content.Context
 import android.provider.Settings
-import com.example.echat.firebase.ResultState
+import com.example.echat.firebaseauth.ResultState
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow

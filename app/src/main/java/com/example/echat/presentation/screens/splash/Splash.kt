@@ -52,13 +52,24 @@ fun Splash(navController: NavController) {
 
         delay(1500)
 
-        if (prefManager.isFirstTime()) {
-            navController.navigate(Screens.OnBoarding.route) {
-                popUpTo(Screens.Splash.route) { inclusive = true }
+        when {
+
+            prefManager.isRegistered() -> {
+                navController.navigate(Screens.Home.route) {
+                    popUpTo(Screens.Splash.route) { inclusive = true }
+                }
             }
-        } else {
-            navController.navigate(Screens.Login.route) {
-                popUpTo(Screens.Splash.route) { inclusive = true }
+
+            prefManager.isFirstTime() -> {
+                navController.navigate(Screens.OnBoarding.route) {
+                    popUpTo(Screens.Splash.route) { inclusive = true }
+                }
+            }
+
+            else -> {
+                navController.navigate(Screens.Login.route) {
+                    popUpTo(Screens.Splash.route) { inclusive = true }
+                }
             }
         }
     }
@@ -187,5 +198,13 @@ class PrefManager(context: Context) {
 
     fun setFirstTime(value: Boolean) {
         prefs.edit().putBoolean("is_first_time", value).apply()
+    }
+
+    fun isRegistered(): Boolean {
+        return prefs.getBoolean("is_registered", false)
+    }
+
+    fun setRegistered(value: Boolean) {
+        prefs.edit().putBoolean("is_registered", value).apply()
     }
 }

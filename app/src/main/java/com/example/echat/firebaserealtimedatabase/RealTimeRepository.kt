@@ -1,6 +1,6 @@
 package com.example.echat.firebaserealtimedatabase
 
-import com.example.echat.firebase.ResultState
+import com.example.echat.firebaseauth.ResultState
 import kotlinx.coroutines.flow.Flow
 
 interface RealTimeRepository {

@@ -57,8 +57,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.echat.R
-import com.example.echat.firebase.AuthRepositoryImpl
-import com.example.echat.firebase.AuthViewModel
+import com.example.echat.firebaseauth.AuthRepositoryImpl
+import com.example.echat.firebaseauth.AuthViewModel
 import com.example.echat.firebaserealtimedatabase.RealTimeDbRepository
 import com.example.echat.firebaserealtimedatabase.RealTimeUser
 import com.example.echat.firebaserealtimedatabase.RealTimeViewModel

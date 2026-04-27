@@ -1,4 +1,4 @@
-package com.example.echat.firebase
+package com.example.echat.firebaseauth
 
 data class AuthUser(
     val username : String? ="",

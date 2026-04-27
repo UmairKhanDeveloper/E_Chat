@@ -1,4 +1,4 @@
-package com.example.echat.firebase
+package com.example.echat.firebaseauth
 
 sealed class ResultState<out T> {
     object Loading : ResultState<Nothing>()

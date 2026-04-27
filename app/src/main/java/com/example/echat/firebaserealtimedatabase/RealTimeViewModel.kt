@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.echat.firebase.ResultState
+import com.example.echat.firebaseauth.ResultState
 import kotlinx.coroutines.launch
 
 class RealTimeViewModel(private val repository: RealTimeRepository) : ViewModel() {

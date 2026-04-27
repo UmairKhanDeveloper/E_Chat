@@ -1,5 +1,6 @@
 package com.example.echat.presentation.screens.loginDetails.login
 
+import PrefManager
 import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -7,16 +8,28 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
@@ -28,21 +41,23 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.echat.R
-import com.example.echat.firebase.AuthRepositoryImpl
-import com.example.echat.firebase.AuthViewModel
 import com.example.echat.googlefibase.GoogleAuthUiClient
 import com.example.echat.googlefibase.SignInResult
 import com.example.echat.googlefibase.SignInViewModel
 import com.example.echat.presentation.navigation.Screens
-import com.example.echat.presentation.screens.registerDetails.sginup.*
+import com.example.echat.presentation.screens.registerDetails.sginup.CustomAuthTextFieldEmail
+import com.example.echat.presentation.screens.registerDetails.sginup.CustomAuthTextFieldPassword
+import com.example.echat.presentation.screens.registerDetails.sginup.LoginButton
+import com.example.echat.presentation.screens.registerDetails.sginup.SocialButton
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 @Composable
 fun Login(navController: NavController) {
+    val context = LocalContext.current
+    val prefManager = remember { PrefManager(context) }
 
     val titleFont = FontFamily(Font(R.font.robot_black))
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val googleAuthUiClient = remember { GoogleAuthUiClient(context) }
 
@@ -58,7 +73,6 @@ fun Login(navController: NavController) {
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
-
         if (result.resultCode == Activity.RESULT_OK) {
 
             coroutineScope.launch {
@@ -156,7 +170,12 @@ fun Login(navController: NavController) {
 
                 CustomAuthTextFieldEmail(email, { email = it }, "Email", Icons.Default.Email)
 
-                CustomAuthTextFieldPassword(password, { password = it }, "Password", Icons.Default.Lock)
+                CustomAuthTextFieldPassword(
+                    password,
+                    { password = it },
+                    "Password",
+                    Icons.Default.Lock
+                )
 
                 errorMessage?.let {
                     Text(it, color = Color.Red, fontSize = 13.sp)
@@ -206,7 +225,10 @@ fun Login(navController: NavController) {
 
                 Text(
                     "Forgot Password?",
-                    modifier = Modifier.padding(bottom = 16.dp).clickable { },
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .clickable {  navController.navigate(Screens.ForgetPassword.route + "/$email")
+                         },
                     color = Color(0xFF6B7580)
                 )
 
@@ -226,6 +248,7 @@ fun Login(navController: NavController) {
                             isGoogleLoading = false
                         }
                     }
+
                 }
 
                 Row {

@@ -19,7 +19,6 @@ class GoogleAuthUiClient(
     private val oneTapClient: SignInClient = Identity.getSignInClient(context)
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    // Start Google One Tap sign-in
     suspend fun signIn(): IntentSender? {
         val result = try {
             oneTapClient.beginSignIn(buildSignInRequest()).await()
@@ -31,7 +30,6 @@ class GoogleAuthUiClient(
         return result?.pendingIntent?.intentSender
     }
 
-    // Handle sign-in result from Intent
     suspend fun signInWithIntent(intent: Intent): SignInResult {
         val credential = oneTapClient.getSignInCredentialFromIntent(intent)
         val googleIdToken = credential.googleIdToken
@@ -59,7 +57,6 @@ class GoogleAuthUiClient(
         }
     }
 
-    // Sign out user
     suspend fun signOut() {
         try {
             oneTapClient.signOut().await()
@@ -70,7 +67,6 @@ class GoogleAuthUiClient(
         }
     }
 
-    // Get current signed-in user
     fun getSignedInUser(): UserData? {
         return auth.currentUser?.let {
             UserData(
@@ -81,7 +77,6 @@ class GoogleAuthUiClient(
         }
     }
 
-    // Build Google One Tap request
     private fun buildSignInRequest(): BeginSignInRequest {
         return BeginSignInRequest.Builder()
             .setGoogleIdTokenRequestOptions(

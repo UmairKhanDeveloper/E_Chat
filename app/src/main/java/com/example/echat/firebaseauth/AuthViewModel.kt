@@ -1,4 +1,4 @@
-package com.example.echat.firebase
+package com.example.echat.firebaseauth
 
 import android.app.Activity
 import androidx.lifecycle.ViewModel
