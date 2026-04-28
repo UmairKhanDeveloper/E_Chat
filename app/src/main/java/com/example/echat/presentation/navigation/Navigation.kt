@@ -47,6 +47,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.echat.R
+import com.example.echat.presentation.screens.addfriend.AddFriend
 import com.example.echat.presentation.screens.forgetpassword.ForgetPassword
 import com.example.echat.presentation.screens.groups.Groups
 import com.example.echat.presentation.screens.home.Home
@@ -236,6 +237,21 @@ fun Navigation(navController: NavHostController) {
         ) {
             More(navController)
         }
+        composable(
+            route = Screens.AddFriend.route,
+            enterTransition = {
+                androidx.compose.animation.fadeIn(
+                    animationSpec = androidx.compose.animation.core.tween(600)
+                )
+            },
+            exitTransition = {
+                androidx.compose.animation.fadeOut(
+                    animationSpec = androidx.compose.animation.core.tween(300)
+                )
+            }
+        ) {
+            AddFriend(navController)
+        }
     }
 }
 
@@ -254,6 +270,7 @@ sealed class Screens(val title: String, val route: String, val icon: Int) {
     object Groups : Screens("Groups", "Groups", R.drawable.group)
     object Profile : Screens("Profile", "Profile", R.drawable.profile)
     object More : Screens("More", "More", R.drawable.menu)
+    object AddFriend : Screens("AddFriend", "AddFriend", R.drawable.menu)
 }
 
 
@@ -372,6 +389,7 @@ fun NavEntry() {
         Screens.Splash.route,
         Screens.OnBoarding.route,
         Screens.Login.route,
+        Screens.AddFriend.route,
         Screens.UserInformation.route -> false
 
         else -> true

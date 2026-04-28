@@ -17,15 +17,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -37,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.echat.R
+import com.example.echat.presentation.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -60,86 +65,203 @@ fun Home(navController: NavController) {
         topBar = {
 
             TopAppBar(
-
                 title = {
 
                     if (isSearchActive) {
-                        TextField(
-                            value = searchText,
-                            onValueChange = { searchText = it },
-                            placeholder = { Text("Search...") },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = TextFieldDefaults.colors(Color.White)
-                        )
-                    }
 
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth().padding(end = 10.dp)
+                                .height(40.dp)
+                                .background(
+                                    color = Color(0xFFF3F3F3),
+                                    shape = RoundedCornerShape(20.dp)
+                                )
+                                .padding(horizontal = 16.dp),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+
+                            BasicTextField(
+                                value = searchText,
+                                onValueChange = {
+                                    searchText = it
+                                },
+                                singleLine = true,
+
+                                textStyle = LocalTextStyle.current.copy(
+                                    color = Color.Black,
+                                    fontSize = 13.sp,
+                                    lineHeight = 13.sp
+                                ),
+
+                                modifier = Modifier.fillMaxWidth(),
+                                cursorBrush = SolidColor(Color.Gray),
+                                decorationBox = { innerTextField ->
+
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(40.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Start
+                                    ) {
+
+                                        if (searchText.isEmpty()) {
+                                            Text(
+                                                text = "Search",
+                                                color = Color(0xFFBDBDBD),
+                                                fontSize = 13.sp
+                                            )
+                                        }
+
+                                        Box(
+                                            modifier = Modifier.weight(1f),
+                                            contentAlignment = Alignment.CenterStart
+                                        ) {
+                                            innerTextField()
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
                 },
 
                 navigationIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo_e_chat__2_),
-                        contentDescription = ""
-                    )
+
+                    if (!isSearchActive) {
+
+                        Image(
+                            painter = painterResource(
+                                id = R.drawable.logo_e_chat__2_
+                            ),
+                            contentDescription = null
+                        )
+                    }
                 },
 
                 actions = {
 
                     Row(
-                        modifier = Modifier.padding(end = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        modifier = Modifier.padding(end = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        IconButton(onClick = {
-                            isSearchActive = !isSearchActive
-                        }) {
-                            Image(
-                                painter = painterResource(id = R.drawable.search),
-                                contentDescription = "Search",
-                                modifier = Modifier.size(24.dp)
-                            )
+                        IconButton(
+                            onClick = {
+                                isSearchActive = !isSearchActive
+                            }
+                        ) {
+
+                            if (isSearchActive) {
+
+                                Box(
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .background(color = Color(0xFFFFFFFF).copy(alpha = 0.20f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Close Menu",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color.White
+                                    )
+                                }
+
+
+                            } else {
+
+                                Image(
+                                    painter = painterResource(id = R.drawable.search),
+                                    contentDescription = "Search",
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
                         }
+
                         Box {
 
-                            IconButton(onClick = {
-                                isMenuExpanded = !isMenuExpanded
-                            }) {
+                            IconButton(
+                                onClick = {
+                                    isMenuExpanded = !isMenuExpanded
+                                }
+                            ) {
 
-                                Icon(
-                                    painter = painterResource(
-                                        id = if (isMenuExpanded) R.drawable.close else R.drawable.plus
-                                    ),
-                                    contentDescription = "Menu",
-                                    modifier = Modifier.size(30.dp)
-                                )
+                                if (isMenuExpanded) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .background(color = Color(0xFFFFFFFF).copy(alpha = 0.20f)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = "Close Menu",
+                                            modifier = Modifier.size(30.dp),
+                                            tint = Color.White
+                                        )
+                                    }
+
+                                } else {
+
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.plus),
+                                        contentDescription = "Open Menu",
+                                        modifier = Modifier.size(36.dp),
+                                        tint = Color.White
+                                    )
+                                }
                             }
 
                             DropdownMenu(
                                 expanded = isMenuExpanded,
-                                onDismissRequest = { isMenuExpanded = false }
+                                onDismissRequest = {
+                                    isMenuExpanded = false
+                                },
+                                containerColor = Color.White,
+                                shape = RoundedCornerShape(10.dp)
                             ) {
 
                                 DropdownMenuItem(
-                                    text = { Text("Add Friends") },
-                                    onClick = { isMenuExpanded = false },
+                                    text = {
+                                        Text(
+                                            "Add Friend",
+                                            color = Color(0xFF3F3F46),
+                                            modifier = Modifier.padding(start = 8.dp)
+                                        )
+                                    },
+                                    onClick = {
+                                        navController.navigate(Screens.AddFriend.route)
+                                        isMenuExpanded = false
+                                    },
                                     leadingIcon = {
                                         Icon(
                                             painter = painterResource(id = R.drawable.plus),
                                             contentDescription = null,
-                                            modifier = Modifier.size(24.dp)
+                                            tint = Color(0xFF9CA3AF),
+                                            modifier = Modifier.size(22.dp)
                                         )
                                     }
                                 )
 
                                 DropdownMenuItem(
-                                    text = { Text("Create Group") },
-                                    onClick = { isMenuExpanded = false },
+                                    text = {
+                                        Text(
+                                            "Create Group",
+                                            color = Color(0xFF3F3F46),
+                                            modifier = Modifier.padding(start = 8.dp)
+                                        )
+                                    },
+                                    onClick = {
+                                        isMenuExpanded = false
+                                    },
                                     leadingIcon = {
                                         Icon(
                                             painter = painterResource(id = R.drawable.group),
                                             contentDescription = null,
-                                            modifier = Modifier.size(24.dp)
+                                            tint = Color(0xFF9CA3AF),
+                                            modifier = Modifier.size(22.dp)
                                         )
                                     }
                                 )
@@ -284,7 +406,7 @@ fun ChatListScreen() {
         ChatItem("Cayla Rath", "See you soon!", "11:20 05/05", 0, R.drawable.avatar),
 
 
-    )
+        )
 
     LazyColumn(
         modifier = Modifier
