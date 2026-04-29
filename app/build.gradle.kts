@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.googleid)
     implementation("androidx.compose.material:material-icons-extended")
     implementation(libs.firebase.auth)
+    implementation(libs.androidx.material3)
 
     // Testing
     testImplementation(libs.junit)

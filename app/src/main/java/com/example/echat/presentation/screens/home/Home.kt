@@ -254,6 +254,7 @@ fun Home(navController: NavController) {
                                         )
                                     },
                                     onClick = {
+                                        navController.navigate(Screens.CreateGroups.route)
                                         isMenuExpanded = false
                                     },
                                     leadingIcon = {
