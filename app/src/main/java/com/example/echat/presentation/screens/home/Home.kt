@@ -3,6 +3,7 @@ package com.example.echat.presentation.screens.home
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -286,7 +287,7 @@ fun Home(navController: NavController) {
                     bottom = it.calculateTopPadding()
                 )
         ) {
-            ChatListScreen()
+            ChatListScreen(navController = navController)
         }
     }
 }
@@ -302,10 +303,10 @@ data class ChatItem(
 
 
 @Composable
-fun ChatItemUI(item: ChatItem) {
+fun ChatItemUI(item: ChatItem,navController: NavController) {
 
     Row(
-        modifier = Modifier
+        modifier = Modifier.clickable{navController.navigate(Screens.ChatsConversation.route)}
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -372,7 +373,7 @@ fun ChatItemUI(item: ChatItem) {
 }
 
 @Composable
-fun ChatListScreen() {
+fun ChatListScreen(navController: NavController) {
 
     val chatList = listOf(
         ChatItem(
@@ -414,7 +415,7 @@ fun ChatListScreen() {
             .fillMaxSize()
     ) {
         items(chatList) {
-            ChatItemUI(it)
+            ChatItemUI(it,navController)
         }
     }
 }

@@ -193,7 +193,7 @@ fun PhoneInputField(
 }
 
 @Composable
-fun FriendList(searchText: String) {
+fun FriendList(searchText: String, modifier: Modifier = Modifier) {
 
     val friends = listOf(
         Friend("David Wayne", "(+44) 50 9265 3022", R.drawable.avatar),
@@ -211,7 +211,7 @@ fun FriendList(searchText: String) {
     }
 
     LazyColumn(
-        modifier = Modifier.padding(top = 16.dp)
+        modifier = modifier // 👈 important
     ) {
         items(filteredList) { friend ->
             FriendItem(friend)
