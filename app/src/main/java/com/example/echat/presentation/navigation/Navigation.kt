@@ -60,6 +60,7 @@ import com.example.echat.presentation.screens.profile.Profile
 import com.example.echat.presentation.screens.registerDetails.sginup.SignUp
 import com.example.echat.presentation.screens.registerDetails.userinformation.UserInformation
 import com.example.echat.presentation.screens.settingnotification.SettingNotification
+import com.example.echat.presentation.screens.userinformation.UserInformationScreen
 
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -284,6 +285,21 @@ fun Navigation(navController: NavHostController) {
         ) {
             ChatsConversation(navController)
         }
+        composable(
+            route = Screens.UserInformationScreen.route,
+            enterTransition = {
+                androidx.compose.animation.fadeIn(
+                    animationSpec = androidx.compose.animation.core.tween(600)
+                )
+            },
+            exitTransition = {
+                androidx.compose.animation.fadeOut(
+                    animationSpec = androidx.compose.animation.core.tween(300)
+                )
+            }
+        ) {
+            UserInformationScreen(navController)
+        }
     }
 }
 
@@ -305,6 +321,7 @@ sealed class Screens(val title: String, val route: String, val icon: Int) {
     object AddFriend : Screens("AddFriend", "AddFriend", R.drawable.menu)
     object CreateGroups : Screens("CreateGroups", "CreateGroups", R.drawable.menu)
     object ChatsConversation : Screens("ChatsConversation", "ChatsConversation", R.drawable.menu)
+    object UserInformationScreen : Screens("UserInformationScreen", "UserInformationScreen", R.drawable.menu)
 }
 
 
@@ -426,6 +443,7 @@ fun NavEntry() {
         Screens.AddFriend.route,
         Screens.CreateGroups.route,
         Screens.ChatsConversation.route,
+        Screens.UserInformationScreen.route,
         Screens.UserInformation.route -> false
 
         else -> true
