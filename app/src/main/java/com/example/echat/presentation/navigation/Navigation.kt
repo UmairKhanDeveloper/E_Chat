@@ -47,6 +47,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.echat.R
+import com.example.echat.presentation.screens.ChatsUserInformationMedia.ChatsUserInformationMedia
 import com.example.echat.presentation.screens.addfriend.AddFriend
 import com.example.echat.presentation.screens.chatsconversation.ChatsConversation
 import com.example.echat.presentation.screens.creategroups.CreateGroups
@@ -300,6 +301,21 @@ fun Navigation(navController: NavHostController) {
         ) {
             UserInformationScreen(navController)
         }
+        composable(
+            route = Screens.ChatsUserInformationMedia.route,
+            enterTransition = {
+                androidx.compose.animation.fadeIn(
+                    animationSpec = androidx.compose.animation.core.tween(600)
+                )
+            },
+            exitTransition = {
+                androidx.compose.animation.fadeOut(
+                    animationSpec = androidx.compose.animation.core.tween(300)
+                )
+            }
+        ) {
+            ChatsUserInformationMedia(navController)
+        }
     }
 }
 
@@ -322,6 +338,7 @@ sealed class Screens(val title: String, val route: String, val icon: Int) {
     object CreateGroups : Screens("CreateGroups", "CreateGroups", R.drawable.menu)
     object ChatsConversation : Screens("ChatsConversation", "ChatsConversation", R.drawable.menu)
     object UserInformationScreen : Screens("UserInformationScreen", "UserInformationScreen", R.drawable.menu)
+    object ChatsUserInformationMedia : Screens("ChatsUserInformationMedia", "ChatsUserInformationMedia", R.drawable.menu)
 }
 
 
@@ -444,6 +461,7 @@ fun NavEntry() {
         Screens.CreateGroups.route,
         Screens.ChatsConversation.route,
         Screens.UserInformationScreen.route,
+        Screens.ChatsUserInformationMedia.route,
         Screens.UserInformation.route -> false
 
         else -> true

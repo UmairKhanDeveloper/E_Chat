@@ -35,11 +35,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.echat.R
+import com.example.echat.presentation.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -181,7 +183,7 @@ fun UserInformationScreen(navController: NavController) {
             }
 
             item {
-                ChatSettingsScreen()
+                ChatSettingsScreen(navController)
             }
             item {
                 UserItem(icon = R.drawable.danger_circle,"Report")
@@ -198,7 +200,7 @@ fun UserInformationScreen(navController: NavController) {
 }
 
 @Composable
-fun ChatSettingsScreen() {
+fun ChatSettingsScreen(navController: NavController) {
 
     val switches = remember {
         mutableStateMapOf(
@@ -219,7 +221,8 @@ fun ChatSettingsScreen() {
             title = "Media, Links & Documents",
             icon = R.drawable.gallery,
             trailingText = "152",
-            showArrow = true
+            showArrow = true,
+            onClickable = {navController.navigate(Screens.ChatsUserInformationMedia.route)}
         )
 
         SettingsSwitchItem(
@@ -232,7 +235,9 @@ fun ChatSettingsScreen() {
         SettingsItem(
             title = "Custom Notification",
             icon = R.drawable.bell,
-            showArrow = true
+            showArrow = true,
+            onClickable = {}
+
         )
 
         SettingsSwitchItem(
@@ -263,7 +268,9 @@ fun ChatSettingsScreen() {
         SettingsItem(
             title = "Add To Group",
             icon = R.drawable.users_group_two_rounded,
-            showArrow = true
+            showArrow = true,
+            onClickable = {}
+
         )
 
         ColorItem(
@@ -283,12 +290,13 @@ fun SettingsItem(
     title: String,
     icon: Int,
     trailingText: String? = null,
-    showArrow: Boolean = false
+    showArrow: Boolean = false,
+    onClickable: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { }
+            .clickable {onClickable() }
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
