@@ -48,6 +48,7 @@ import androidx.navigation.navArgument
 import com.example.echat.R
 import com.example.echat.presentation.screens.ChatsUserInformationMedia.ChatsUserInformationMedia
 import com.example.echat.presentation.screens.addfriend.AddFriend
+import com.example.echat.presentation.screens.addtogroups.AddToGroups
 import com.example.echat.presentation.screens.chatsconversation.ChatsConversation
 import com.example.echat.presentation.screens.creategroups.CreateGroups
 import com.example.echat.presentation.screens.forgetpassword.ForgetPassword
@@ -331,6 +332,21 @@ fun Navigation(navController: NavHostController) {
         ) {
             ProtectedChat(navController)
         }
+        composable(
+            route = Screens.AddToGroups.route,
+            enterTransition = {
+                androidx.compose.animation.fadeIn(
+                    animationSpec = androidx.compose.animation.core.tween(600)
+                )
+            },
+            exitTransition = {
+                androidx.compose.animation.fadeOut(
+                    animationSpec = androidx.compose.animation.core.tween(300)
+                )
+            }
+        ) {
+            AddToGroups(navController)
+        }
     }
 }
 
@@ -358,6 +374,7 @@ sealed class Screens(val title: String, val route: String, val icon: Int) {
         Screens("ChatsUserInformationMedia", "ChatsUserInformationMedia", R.drawable.menu)
 
     object ProtectedChat : Screens("ProtectedChat", "ProtectedChat", R.drawable.menu)
+    object AddToGroups : Screens("AddToGroups", "AddToGroups", R.drawable.menu)
 }
 
 
@@ -482,6 +499,7 @@ fun NavEntry() {
         Screens.UserInformationScreen.route,
         Screens.ChatsUserInformationMedia.route,
         Screens.ProtectedChat.route,
+        Screens.AddToGroups.route,
         Screens.UserInformation.route -> false
 
         else -> true

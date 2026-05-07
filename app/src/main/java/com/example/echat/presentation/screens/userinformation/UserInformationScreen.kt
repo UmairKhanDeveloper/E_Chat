@@ -33,6 +33,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -277,7 +278,7 @@ fun ChatSettingsScreen(navController: NavController) {
             title = "Add To Group",
             icon = R.drawable.users_group_two_rounded,
             showArrow = true,
-            onClickable = {}
+            onClickable = { navController.navigate(Screens.AddToGroups.route) }
 
         )
 
@@ -378,13 +379,19 @@ fun SettingsSwitchItem(
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange,
+
+            modifier = Modifier.scale(0.9f),
+
             colors = SwitchDefaults.colors(
+
                 checkedThumbColor = Color.White,
-                checkedTrackColor = Color(0xFF03A9F4),
+                checkedTrackColor = Color(0xFF00B8FF),
+
                 uncheckedThumbColor = Color.White,
-                checkedBorderColor = Color(0xFF03A9F4),
-                uncheckedBorderColor = Color(0xFFD0D1DB),
-                uncheckedTrackColor = Color(0xFFD0D1DB)
+                uncheckedTrackColor = Color(0xFFD9D9D9),
+
+                checkedBorderColor = Color(0xFF00B8FF),
+                uncheckedBorderColor = Color.Transparent
             )
         )
 

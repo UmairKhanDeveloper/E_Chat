@@ -1,28 +1,26 @@
-package com.example.echat.presentation.screens.protectedchat
+package com.example.echat.presentation.screens.addtogroups
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Divider
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -32,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -45,12 +42,8 @@ import com.example.echat.R
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProtectedChat(navController: NavController) {
-    var protectedChat by remember { mutableStateOf(true) }
-    var pinSecurity by remember { mutableStateOf(false) }
-    var faceRecognition by remember { mutableStateOf(false) }
-    var fingerprintSecurity by remember { mutableStateOf(false) }
-
+fun AddToGroups(navController: NavController) {
+    var search by remember { mutableStateOf("") }
     Scaffold(containerColor = Color(0xFFFFFFFF), topBar = {
         TopAppBar(title = {
             Text(
@@ -60,7 +53,6 @@ fun ProtectedChat(navController: NavController) {
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(start = 10.dp)
             )
-
         }, navigationIcon = {
             Box(
                 modifier = Modifier
@@ -70,7 +62,7 @@ fun ProtectedChat(navController: NavController) {
                     }
                     .size(40.dp)
                     .shadow(
-                        elevation = 1.dp,
+                        elevation = 2.dp,
                         shape = CircleShape,
                         clip = false
                     )
@@ -97,7 +89,7 @@ fun ProtectedChat(navController: NavController) {
                     modifier = Modifier
                         .size(40.dp)
                         .shadow(
-                            elevation = 1.dp,
+                            elevation = 2.dp,
                             shape = CircleShape,
                             clip = false
                         )
@@ -121,7 +113,7 @@ fun ProtectedChat(navController: NavController) {
                     modifier = Modifier
                         .size(40.dp)
                         .shadow(
-                            elevation = 1.dp,
+                            elevation = 2.dp,
                             shape = CircleShape,
                             clip = false
                         )
@@ -140,111 +132,77 @@ fun ProtectedChat(navController: NavController) {
             }
         }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFFFFFFF)))
     }) {
-        Column(
+        LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    top = it.calculateTopPadding(),
-                    bottom = it.calculateBottomPadding()
-                )
+                .fillMaxWidth()
+                .padding(top = it.calculateTopPadding(), bottom = it.calculateBottomPadding())
         ) {
+            item {
+                Text(
+                    text = "Add to Groups",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.W400,
+                    color = Color(0xFF686A8A),
+                    modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 24.dp)
+                )
+            }
 
-            SecurityItem(
-                icon = R.drawable.shield_user,
-                title = "Protected Chat",
-                checked = protectedChat,
-                onCheckedChange = {
-                    protectedChat = it
-                }
-            )
+            item {
 
-            Divider(
-                color = Color(0xFF1E1E1E),
-                thickness = 1.dp, modifier = Modifier.padding(horizontal = 16.dp)
-            )
+                TextField(
+                    value = search,
+                    onValueChange = {
+                        search = it
+                    },
 
-            Spacer(modifier = Modifier.height(8.dp))
+                    placeholder = {
+                        Text(
+                            text = "Search",
+                            color = Color(0xFFD0D1DB),
+                            fontSize = 14.sp
+                        )
+                    },
 
-            SecurityItem(
-                icon = R.drawable.password,
-                title = "PIN Security",
-                checked = pinSecurity,
-                onCheckedChange = {
-                    pinSecurity = it
-                }
-            )
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.search),
+                            contentDescription = null,
+                            tint = Color(0xFFD0D1DB),
+                            modifier = Modifier.size(22.dp)
+                        )
+                    },
 
-            SecurityItem(
-                icon = R.drawable.face_scan_square,
-                title = "Face Recognition",
-                checked = faceRecognition,
-                onCheckedChange = {
-                    faceRecognition = it
-                }
-            )
+                    singleLine = true,
 
-            SecurityItem(
-                icon = R.drawable.fingerprint,
-                title = "Fingerprint Security",
-                checked = fingerprintSecurity,
-                onCheckedChange = {
-                    fingerprintSecurity = it
-                }
-            )
+                    shape = RoundedCornerShape(10.dp),
+
+                    colors = TextFieldDefaults.colors(
+
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+
+                        cursorColor = Color.White,
+
+                        focusedTextColor = Color(0xFFD0D1DB),
+                        unfocusedTextColor =Color(0xFFD0D1DB)
+                    ),
+
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .height(56.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color(0xFFD0D1DB),
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                )
+            }
         }
 
     }
 
-}
-@Composable
-fun SecurityItem(
-    icon: Int,
-    title: String,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-) {
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 14.dp),
-
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Image(
-            painter = painterResource(id = icon),
-            contentDescription = "",
-            modifier = Modifier.size(22.dp)
-        )
-
-        Spacer(modifier = Modifier.width(14.dp))
-
-        Text(
-            text = title,
-            color = Color(0xFF2C2D3A),
-            fontWeight = FontWeight.W700,
-            fontSize = 16.sp,
-            modifier = Modifier.weight(1f)
-        )
-
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange,
-
-            modifier = Modifier.scale(0.9f),
-
-            colors = SwitchDefaults.colors(
-
-                checkedThumbColor = Color.White,
-                checkedTrackColor = Color(0xFF00B8FF),
-
-                uncheckedThumbColor = Color.White,
-                uncheckedTrackColor = Color(0xFFD9D9D9),
-
-                checkedBorderColor = Color(0xFF00B8FF),
-                uncheckedBorderColor = Color.Transparent
-            )
-        )
-    }
 }
