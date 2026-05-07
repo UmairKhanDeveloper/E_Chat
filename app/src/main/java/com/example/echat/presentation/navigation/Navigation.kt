@@ -10,7 +10,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -58,6 +57,7 @@ import com.example.echat.presentation.screens.loginDetails.login.Login
 import com.example.echat.presentation.screens.more.More
 import com.example.echat.presentation.screens.onboarding.Onboarding
 import com.example.echat.presentation.screens.profile.Profile
+import com.example.echat.presentation.screens.protectedchat.ProtectedChat
 import com.example.echat.presentation.screens.registerDetails.sginup.SignUp
 import com.example.echat.presentation.screens.registerDetails.userinformation.UserInformation
 import com.example.echat.presentation.screens.settingnotification.SettingNotification
@@ -316,6 +316,21 @@ fun Navigation(navController: NavHostController) {
         ) {
             ChatsUserInformationMedia(navController)
         }
+        composable(
+            route = Screens.ProtectedChat.route,
+            enterTransition = {
+                androidx.compose.animation.fadeIn(
+                    animationSpec = androidx.compose.animation.core.tween(600)
+                )
+            },
+            exitTransition = {
+                androidx.compose.animation.fadeOut(
+                    animationSpec = androidx.compose.animation.core.tween(300)
+                )
+            }
+        ) {
+            ProtectedChat(navController)
+        }
     }
 }
 
@@ -328,7 +343,6 @@ sealed class Screens(val title: String, val route: String, val icon: Int) {
     object OnBoarding : Screens("OnBoarding", "OnBoarding", R.drawable.vector)
     object Login : Screens("Login", "Login", R.drawable.vector)
     object SignUp : Screens("SignUp", "SignUp", R.drawable.vector)
-
     object UserInformation : Screens("UserInformation", "UserInformation", R.drawable.vector)
     object Home : Screens("Chats", "Home", R.drawable.vector)
     object Groups : Screens("Groups", "Groups", R.drawable.group)
@@ -337,8 +351,13 @@ sealed class Screens(val title: String, val route: String, val icon: Int) {
     object AddFriend : Screens("AddFriend", "AddFriend", R.drawable.menu)
     object CreateGroups : Screens("CreateGroups", "CreateGroups", R.drawable.menu)
     object ChatsConversation : Screens("ChatsConversation", "ChatsConversation", R.drawable.menu)
-    object UserInformationScreen : Screens("UserInformationScreen", "UserInformationScreen", R.drawable.menu)
-    object ChatsUserInformationMedia : Screens("ChatsUserInformationMedia", "ChatsUserInformationMedia", R.drawable.menu)
+    object UserInformationScreen :
+        Screens("UserInformationScreen", "UserInformationScreen", R.drawable.menu)
+
+    object ChatsUserInformationMedia :
+        Screens("ChatsUserInformationMedia", "ChatsUserInformationMedia", R.drawable.menu)
+
+    object ProtectedChat : Screens("ProtectedChat", "ProtectedChat", R.drawable.menu)
 }
 
 
@@ -462,6 +481,7 @@ fun NavEntry() {
         Screens.ChatsConversation.route,
         Screens.UserInformationScreen.route,
         Screens.ChatsUserInformationMedia.route,
+        Screens.ProtectedChat.route,
         Screens.UserInformation.route -> false
 
         else -> true

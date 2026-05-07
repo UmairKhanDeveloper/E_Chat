@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -35,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -186,10 +186,10 @@ fun UserInformationScreen(navController: NavController) {
                 ChatSettingsScreen(navController)
             }
             item {
-                UserItem(icon = R.drawable.danger_circle,"Report")
+                UserItem(icon = R.drawable.danger_circle, "Report")
             }
             item {
-                UserItem(icon = R.drawable.forbidden_circle,"Report")
+                UserItem(icon = R.drawable.forbidden_circle, "Report")
             }
 
 
@@ -222,14 +222,16 @@ fun ChatSettingsScreen(navController: NavController) {
             icon = R.drawable.gallery,
             trailingText = "152",
             showArrow = true,
-            onClickable = {navController.navigate(Screens.ChatsUserInformationMedia.route)}
+            onClickable = { navController.navigate(Screens.ChatsUserInformationMedia.route) }
         )
 
         SettingsSwitchItem(
             title = "Mute Notification",
             icon = R.drawable.volume_loud,
             checked = switches["mute"] ?: false,
-            onCheckedChange = { switches["mute"] = it }
+            onCheckedChange = { switches["mute"] = it },
+            onClickable = {},
+            navController = navController
         )
 
         SettingsItem(
@@ -245,7 +247,9 @@ fun ChatSettingsScreen(navController: NavController) {
             icon = R.drawable.shield_user,
             checked = switches["protected"] ?: false,
             onCheckedChange = { switches["protected"] = it },
-            showArrow = true
+            showArrow = true,
+            onClickable = { navController.navigate(Screens.ProtectedChat.route) },
+            navController = navController
 
         )
 
@@ -254,7 +258,9 @@ fun ChatSettingsScreen(navController: NavController) {
             icon = R.drawable.eye,
             checked = switches["hideChat"] ?: false,
             onCheckedChange = { switches["hideChat"] = it },
-            showArrow = true
+            showArrow = true,
+            onClickable = {},
+            navController = navController
         )
 
         SettingsSwitchItem(
@@ -262,7 +268,9 @@ fun ChatSettingsScreen(navController: NavController) {
             icon = R.drawable.eye,
             checked = switches["hideHistory"] ?: false,
             onCheckedChange = { switches["hideHistory"] = it },
-            showArrow = true
+            showArrow = true,
+            onClickable = {},
+            navController = navController
         )
 
         SettingsItem(
@@ -296,7 +304,7 @@ fun SettingsItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {onClickable() }
+            .clickable { onClickable() }
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -338,10 +346,14 @@ fun SettingsSwitchItem(
     icon: Int,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    showArrow: Boolean = false
+    showArrow: Boolean = false,
+    onClickable: () -> Unit,
+    navController: NavController
+
 ) {
     Row(
         modifier = Modifier
+            .clickable { onClickable() }
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -365,7 +377,15 @@ fun SettingsSwitchItem(
 
         Switch(
             checked = checked,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = onCheckedChange,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = Color.White,
+                checkedTrackColor = Color(0xFF03A9F4),
+                uncheckedThumbColor = Color.White,
+                checkedBorderColor = Color(0xFF03A9F4),
+                uncheckedBorderColor = Color(0xFFD0D1DB),
+                uncheckedTrackColor = Color(0xFFD0D1DB)
+            )
         )
 
         if (showArrow) {

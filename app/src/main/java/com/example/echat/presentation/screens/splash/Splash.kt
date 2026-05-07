@@ -50,7 +50,7 @@ fun Splash(navController: NavController) {
 
         startAnim = true
 
-        delay(1500)
+        delay(1000)
 
         when {
 
